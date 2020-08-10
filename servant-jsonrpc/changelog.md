@@ -1,4 +1,4 @@
-# 1.1.0
+# 1.0.1
 
 Adds standard error codes to the library.
 
