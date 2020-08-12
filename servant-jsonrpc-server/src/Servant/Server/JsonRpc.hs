@@ -8,6 +8,7 @@
 {-# LANGUAGE TypeApplications      #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
+{-# LANGUAGE UndecidableInstances  #-}
 
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
@@ -45,7 +46,7 @@ import           GHC.TypeLits             (KnownSymbol, symbolVal)
 import           Servant.API              ((:<|>) (..), (:>), JSON,
                                            NoContent (..), Post, ReqBody)
 import           Servant.API.ContentTypes (AllCTRender (..))
-import           Servant.Server           (Handler, HasServer (..))
+import           Servant.Server           (Handler, HasServer (..), HasContextEntry, type (.++), DefaultErrorFormatters, ErrorFormatters)
 
 import           Servant.JsonRpc
 
@@ -69,7 +70,7 @@ type RawJsonRpcEndpoint
    :> Post '[JSON] PossibleJsonRpcResponse
 
 
-instance RouteJsonRpc api => HasServer (RawJsonRpc api) context where
+instance (RouteJsonRpc api, HasContextEntry (context .++ DefaultErrorFormatters) ErrorFormatters) => HasServer (RawJsonRpc api) context where
     type ServerT (RawJsonRpc api) m = RpcHandler api m
     route _ cx = route endpoint cx . fmap (serveJsonRpc pxa pxh)
         where
