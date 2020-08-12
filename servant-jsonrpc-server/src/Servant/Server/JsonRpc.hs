@@ -9,7 +9,9 @@
 {-# LANGUAGE TypeApplications      #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
+#if MIN_VERSION_servant_server(0,18,0)
 {-# LANGUAGE UndecidableInstances  #-}
+#endif
 
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
